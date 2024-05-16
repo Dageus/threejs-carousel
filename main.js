@@ -15,6 +15,9 @@ scene.add(cube);
 
 camera.position.z = 5;
 
+const mobius = new Mobius();
+scene.add(mobius);
+
 function animate() {
   requestAnimationFrame(animate);
   cube.rotation.x += 0.01;
