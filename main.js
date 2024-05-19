@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import Mobius from './mobius';
-import * as materials from './materials';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -19,7 +18,9 @@ scene.add(new THREE.AmbientLight('white', 0.3));
 
 const box = new THREE.BoxGeometry(10, 10, 10);
 
-const floor = new THREE.Mesh(box, new materials.MeshLambertMaterial());
+const floor = new THREE.Mesh(box, new THREE.MeshStandardMaterial({
+  color: new THREE.Color('steelblue')
+}));
 floor.scale.set(6, 0.01, 6);
 floor.position.y = -0.5;
 floor.castShadow = true;
