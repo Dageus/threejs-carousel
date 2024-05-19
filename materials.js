@@ -4,21 +4,21 @@ export class Materials {
     constructor() {
         this.objectsDict = [];
 
-        this.meshLambertMaterial = new THREE.MeshLambertMaterial({color: THREE.Color.NAMES.blue});
-        this.meshPhongMaterial = new THREE.MeshPhongMaterial({color: THREE.Color.NAMES.green});
-        this.meshToonMaterial = new THREE.MeshToonMaterial({color: THREE.Color.NAMES.yellow});
+        this.meshLambertMaterial = new THREE.MeshLambertMaterial({ color: THREE.Color.NAMES.blue });
+        this.meshPhongMaterial = new THREE.MeshPhongMaterial({ color: THREE.Color.NAMES.green });
+        this.meshToonMaterial = new THREE.MeshToonMaterial({ color: THREE.Color.NAMES.yellow });
         this.meshNormalMaterial = new THREE.MeshNormalMaterial();
-        this.meshBasicMaterial = new THREE.MeshBasicMaterial({color: THREE.Color.NAMES.pink});
+        this.meshBasicMaterial = new THREE.MeshBasicMaterial({ color: THREE.Color.NAMES.pink });
 
-        addEventListener("changeToGouraudEvent", this.handleChangeToGouraud.bind(this));
-        addEventListener("changeToPhongEvent", this.handleChangeToGouraud.bind(this));
-        addEventListener("changeToCartoonEvent", this.handleChangeToCartoon.bind(this));
-        addEventListener("changeToNormalMapEvent", this.handleChangeToNormalMap.bind(this));
-        addEventListener("changeLightEvent", this.handleChangeLight.bind(this));
+        document.addEventListener("changeToGouraudEvent", this.handleChangeToGouraud.bind(this));
+        document.addEventListener("changeToPhongEvent", this.handleChangeToGouraud.bind(this));
+        document.addEventListener("changeToCartoonEvent", this.handleChangeToCartoon.bind(this));
+        document.addEventListener("changeToNormalMapEvent", this.handleChangeToNormalMap.bind(this));
+        document.addEventListener("changeLightEvent", this.handleChangeLight.bind(this));
     }
 
     addObject(object) {
-        this.objectsDict.push({object: object, color: object.material.color})
+        this.objectsDict.push({ object: object, color: object.material.color })
     }
 
     handleChangeToGouraud() {
@@ -38,7 +38,7 @@ export class Materials {
             item.object.material = this.meshNormalMaterial;
         });
     }
-    
+
     handleChangeLight() {
         this.changeAllObjects(this.meshBasicMaterial);
     }

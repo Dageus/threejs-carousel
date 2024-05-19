@@ -1,8 +1,13 @@
 import * as THREE from 'three';
 import Mobius from './mobius';
+import { InputManager } from './input-manager';
+import { Materials } from './materials';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+new InputManager();
+let materials = new Materials();
 
 const renderer = new THREE.WebGLRenderer({
   antialias: true
@@ -25,6 +30,7 @@ floor.scale.set(6, 0.01, 6);
 floor.position.y = -0.5;
 floor.castShadow = true;
 floor.receiveShadow = true;
+materials.addObject(floor);
 scene.add(floor)
 
 camera.position.set(5, 2.5, 5);
@@ -43,6 +49,7 @@ requestAnimationFrame(function render(t) {
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 });
+
 
 function animate() {
   requestAnimationFrame(animate);
