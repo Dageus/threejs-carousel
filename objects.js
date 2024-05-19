@@ -14,7 +14,7 @@ export class Materials {
         document.addEventListener("changeToPhongEvent", this.handleChangeToGouraud.bind(this));
         document.addEventListener("changeToCartoonEvent", this.handleChangeToCartoon.bind(this));
         document.addEventListener("changeToNormalMapEvent", this.handleChangeToNormalMap.bind(this));
-        document.addEventListener("changeLightEvent", this.handleChangeLight.bind(this));
+        document.addEventListener("toggleLightMaterialEvent", this.handleChangeLight.bind(this));
     }
 
     addObject(object) {
@@ -48,5 +48,11 @@ export class Materials {
             item.object.material = material;
             item.object.material.color = item.color;
         });
+    }
+}
+
+export class Lights {
+    constructor() {
+
     }
 }
