@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import Mobius from './mobius';
 import { InputManager } from './input-manager';
-import { Materials } from './objects';
+import { Lights, Materials } from './objects';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -50,6 +50,7 @@ requestAnimationFrame(function render(t) {
   requestAnimationFrame(render);
 });
 
+let lights = new Lights(scene);
 
 function animate() {
   requestAnimationFrame(animate);

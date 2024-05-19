@@ -116,7 +116,7 @@ export class InputManager {
         }
 
         this.directionalLightToggle = !this.directionalLightToggle;
-        const costumEvent = new CustomEvent("toggleDirectionalLight", { toggle: this.directionalLightToggle });
+        const costumEvent = new CustomEvent("toggleDirectionalLight", { detail: {toggle: this.directionalLightToggle } });
         document.dispatchEvent(costumEvent);
         console.log("dispatch toggleDirectionalLight + ", this.directionalLightToggle);
         this.directionalLightKeyUp = false;
@@ -128,7 +128,7 @@ export class InputManager {
         }
 
         this.ponctualLightsToggle = !this.ponctualLightsToggle;
-        const costumEvent = new CustomEvent("togglePonctualLights", { toggle: this.ponctualLightsToggle });
+        const costumEvent = new CustomEvent("togglePonctualLights", {detail: {toggle: this.ponctualLightsToggle }});
         document.dispatchEvent(costumEvent);
         console.log("dispatch togglePonctualLights + ", this.ponctualLightsToggle);
         this.ponctualLightsKeyUp = false;
@@ -140,7 +140,7 @@ export class InputManager {
         }
 
         this.spotlightToggle = !this.spotlightToggle;
-        const costumEvent = new CustomEvent("toggleSpotlight", { toggle: this.spotlightToggle });
+        const costumEvent = new CustomEvent("toggleSpotlight", { detail: {toggle: this.spotlightToggle }});
         document.dispatchEvent(costumEvent);
         console.log("dispatch toggleSpotlight + ", this.spotlightToggle);
         this.spotlightKeyUp = false;
