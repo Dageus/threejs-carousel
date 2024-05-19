@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-class Materials {
+export class Materials {
     constructor() {
         this.objectsDict = [];
 
