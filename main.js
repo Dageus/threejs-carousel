@@ -3,6 +3,7 @@ import Mobius from './mobius';
 import Carousel from './carousel';
 import { InputManager } from './input-manager';
 import { Lights, Materials } from './objects';
+import { VRButton } from 'three/addons/webxr/VRButton.js';
 
 class MainScene {
   constructor(carousel, mobiusStrip, lights, materialManager) {
@@ -37,6 +38,13 @@ class MainScene {
     this.camera.position.set(75, 90, 75);
     this.camera.lookAt(0, 0, 0);
 
+    this.stereoCamera = new THREE.StereoCamera();
+    this.stereoCamera.aspect = window.innerWidth / window.innerHeight;
+    this.stereoCamera.cameraL.position.copy(this.camera.position);
+    this.stereoCamera.cameraL.quaternion.copy(this.camera.quaternion);
+    this.stereoCamera.cameraR.position.copy(this.camera.position);
+    this.stereoCamera.cameraR.quaternion.copy(this.camera.quaternion);
+
     // Skydome
     const skyGeo = new THREE.SphereGeometry(200, 25, 25); 
     let loader  = new THREE.TextureLoader(),
@@ -51,13 +59,33 @@ class MainScene {
     sky.material.side = THREE.BackSide;
     this.scene.add(sky);
 
-    this.animate = this.animate.bind(this);
+    // vr
+    document.body.appendChild( VRButton.createButton( this.renderer ) );
+    this.renderer.xr.enabled = true;
+
+    this.renderer.setAnimationLoop(this.animate.bind(this));
   }
 
   animate() {
-    let deltaTime = this.clock.getDelta();
-    requestAnimationFrame(this.animate);
-    this.renderer.render(this.scene, this.camera);
+    if (!this.renderer.xr.isPresenting) {
+      this.renderer.render(this.scene, this.camera);
+    } else {
+      this.renderer.clear();
+
+      this.stereoCamera.aspect = window.innerWidth / window.innerHeight;
+
+      this.stereoCamera.cameraL.position.copy(this.camera.position);
+      this.stereoCamera.cameraL.quaternion.copy(this.camera.quaternion);
+      this.stereoCamera.cameraR.position.copy(this.camera.position);
+      this.stereoCamera.cameraR.quaternion.copy(this.camera.quaternion);
+
+      console.log(this.stereoCamera.cameraL.position, this.camera.position);
+      this.renderer.setViewport(0, 0, window.innerWidth / 2, window.innerHeight);
+      this.renderer.render(this.scene, this.stereoCamera.cameraL);
+
+      this.renderer.setViewport(window.innerWidth / 2, 0, window.innerWidth / 2, window.innerHeight);
+      this.renderer.render(this.scene, this.stereoCamera.cameraR);
+    }
   }
  
   resize() {
@@ -77,4 +105,3 @@ let carousel = new Carousel(materialManager);
 let mobius = new Mobius(materialManager)
 let lights = new Lights(mobius.pointLights, carousel.spotlights);
 let mainScene = new MainScene(carousel.carouselGroup, mobius.strip, lights.lightsGroup, materialManager);
-mainScene.animate();

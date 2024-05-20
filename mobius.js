@@ -13,7 +13,6 @@ export default class Mobius {
 
       // Add ponctual light
       if (i % (count / 8) === 0) {
-        console.log("Created ponctual light");
         let pointLight = this.createPonctualLight();
         pointLight.position.set(Math.cos(a), Math.sin(a * 5) / 30, Math.sin(a));
         pointLight.position.multiplyScalar(radius);
