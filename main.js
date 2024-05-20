@@ -37,6 +37,20 @@ class MainScene {
     this.camera.position.set(75, 90, 75);
     this.camera.lookAt(0, 0, 0);
 
+    // Skydome
+    const skyGeo = new THREE.SphereGeometry(200, 25, 25); 
+    let loader  = new THREE.TextureLoader(),
+        texture = loader.load( "space.jpeg" );
+
+    let skydomeMaterial = new THREE.MeshBasicMaterial({ 
+          map: texture,
+    });
+
+    let sky = new THREE.Mesh(skyGeo, skydomeMaterial);
+    sky.rotateY(Math.PI)
+    sky.material.side = THREE.BackSide;
+    this.scene.add(sky);
+
     this.animate = this.animate.bind(this);
   }
 
