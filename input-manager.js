@@ -79,7 +79,7 @@ export class InputManager {
     }
 
     dispatchMaterialEvent(materialEvent) {
-        if (materialEvent === this.lastMaterialEvent) {
+        if (materialEvent === this.lastMaterialEvent && this.lightMaterialToggle) {
             return;
         }
         this.lightMaterialToggle = true;

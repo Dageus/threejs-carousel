@@ -11,10 +11,12 @@ export class Materials {
         this.meshBasicMaterial = new THREE.MeshBasicMaterial();
 
         document.addEventListener("changeToGouraudEvent", this.handleChangeToGouraud.bind(this));
-        document.addEventListener("changeToPhongEvent", this.handleChangeToGouraud.bind(this));
+        document.addEventListener("changeToPhongEvent", this.handleChangeToPhong.bind(this));
         document.addEventListener("changeToCartoonEvent", this.handleChangeToCartoon.bind(this));
         document.addEventListener("changeToNormalMapEvent", this.handleChangeToNormalMap.bind(this));
         document.addEventListener("toggleLightMaterialEvent", this.handleChangeLight.bind(this));
+        document.getElementById('materialID').innerText = 'Current Shading: Gouraud'
+        document.getElementById('lightMaterial').innerText = 'Light Calculation: On'
     }
 
     addObject(object) {
@@ -23,24 +25,33 @@ export class Materials {
 
     handleChangeToGouraud() {
         this.changeAllObjects(this.meshLambertMaterial);
+        document.getElementById('materialID').innerText = 'Current Shading: Gouraud'
+        document.getElementById('lightMaterial').innerText = 'Light Calculation: On'
     }
 
     handleChangeToPhong() {
         this.changeAllObjects(this.meshPhongMaterial);
+        document.getElementById('materialID').innerText = 'Current Shading: Phong'
+        document.getElementById('lightMaterial').innerText = 'Light Calculation: On'
     }
 
     handleChangeToCartoon() {
         this.changeAllObjects(this.meshToonMaterial);
+        document.getElementById('materialID').innerText = 'Current Shading: Cartoon'
+        document.getElementById('lightMaterial').innerText = 'Light Calculation: On'
     }
 
     handleChangeToNormalMap() {
         this.objectsDict.forEach(item => {
             item.object.material = this.meshNormalMaterial;
         });
+        document.getElementById('materialID').innerText = 'Current Shading: NormalMap'
+        document.getElementById('lightMaterial').innerText = 'Light Calculation: On'
     }
 
     handleChangeLight() {
         this.changeAllObjects(this.meshBasicMaterial);
+        document.getElementById('lightMaterial').innerText = 'Light Calculation: Off'
     }
 
     changeAllObjects(material) {
