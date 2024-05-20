@@ -11,8 +11,8 @@ export class InputManager {
         this.ponctualLightsToggle = true;
         this.ponctualLightsKeyUp = true;
 
-        this.spotlightToggle = true;
-        this.spotlightKeyUp = true;
+        this.spotlightsToggle = true;
+        this.spotlightsKeyUp = true;
 
         document.addEventListener("keydown", this.handleKeyDown.bind(this));
         document.addEventListener("keyup", this.handleKeyUp.bind(this));
@@ -42,7 +42,7 @@ export class InputManager {
                 this.dispatchPonctualLightsEvent();
                 break;
             case "KeyS":
-                this.dispatchSpotilghtEvent();
+                this.dispatchSpotilghtsEvent();
                 break;
             default:
                 break;
@@ -66,7 +66,7 @@ export class InputManager {
                 this.ponctualLightsKeyUp = true;
                 break;
             case "KeyS":
-                this.spotlightKeyUp = true;
+                this.spotlightsKeyUp = true;
                 break;
             default:
                 break;
@@ -86,8 +86,6 @@ export class InputManager {
         const costumEvent = new CustomEvent(materialEvent);
         document.dispatchEvent(costumEvent);
         this.lastMaterialEvent = materialEvent;
-        console.log("dispatch " + materialEvent);
-        console.log("Lights: " + this.lightMaterialToggle);
     }
 
     dispatchMaterialLightEvent() {
@@ -99,13 +97,9 @@ export class InputManager {
         if (this.lightMaterialToggle) {
             const costumEvent = new CustomEvent(this.lastMaterialEvent);
             document.dispatchEvent(costumEvent);
-            console.log("dispatch " + this.lastMaterialEvent);
-            console.log("Lights: " + this.lightMaterialToggle);
         } else {
             const costumEvent = new CustomEvent(MaterialEvent.Light);
             document.dispatchEvent(costumEvent);
-            console.log("dispatch " + MaterialEvent.Light);
-            console.log("Lights: " + this.lightMaterialToggle);
         }
         this.lightMaterialKeyUp = false;
     }
@@ -118,7 +112,6 @@ export class InputManager {
         this.directionalLightToggle = !this.directionalLightToggle;
         const costumEvent = new CustomEvent("toggleDirectionalLight", { detail: {toggle: this.directionalLightToggle } });
         document.dispatchEvent(costumEvent);
-        console.log("dispatch toggleDirectionalLight + ", this.directionalLightToggle);
         this.directionalLightKeyUp = false;
     }
 
@@ -130,20 +123,18 @@ export class InputManager {
         this.ponctualLightsToggle = !this.ponctualLightsToggle;
         const costumEvent = new CustomEvent("togglePonctualLights", {detail: {toggle: this.ponctualLightsToggle }});
         document.dispatchEvent(costumEvent);
-        console.log("dispatch togglePonctualLights + ", this.ponctualLightsToggle);
         this.ponctualLightsKeyUp = false;
     }
 
-    dispatchSpotilghtEvent() {
-        if (!this.spotlightKeyUp) {
+    dispatchSpotilghtsEvent() {
+        if (!this.spotlightsKeyUp) {
             return;
         }
 
-        this.spotlightToggle = !this.spotlightToggle;
-        const costumEvent = new CustomEvent("toggleSpotlight", { detail: {toggle: this.spotlightToggle }});
+        this.spotlightsToggle = !this.spotlightsToggle;
+        const costumEvent = new CustomEvent("toggleSpotlights", { detail: {toggle: this.spotlightsToggle }});
         document.dispatchEvent(costumEvent);
-        console.log("dispatch toggleSpotlight + ", this.spotlightToggle);
-        this.spotlightKeyUp = false;
+        this.spotlightsKeyUp = false;
     }
 }
 

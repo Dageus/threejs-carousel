@@ -76,22 +76,35 @@ export class Lights {
 
         document.addEventListener("toggleDirectionalLight", this.handleDirectionalLight.bind(this));
         document.addEventListener("togglePonctualLights", this.handlePonctualLights.bind(this));
-        document.addEventListener("toggleSpotlight", this.handleSpotlight.bind(this));
+        document.addEventListener("toggleSpotlights", this.handleSpotlights.bind(this));
+        document.getElementById('directionalLight').innerText = 'Directional Light: On';
+        document.getElementById('spotlights').innerText = 'Spotlights: On';
+        document.getElementById('ponctualLights').innerText = 'Ponctual Lights: On';
     }
 
     handleDirectionalLight(event) {
         if (event.detail.toggle) {
             this.directionalLight.intensity = 1;
+            document.getElementById('directionalLight').innerText = 'Directional Light: On';
         } else {
             this.directionalLight.intensity = 0;
+            document.getElementById('directionalLight').innerText = 'Directional Light: Off';
         }
     }
 
-    handlePonctualLights(toggle) {
-
+    handlePonctualLights(event) {
+        if (event.detail.toggle) {
+            document.getElementById('ponctualLights').innerText = 'Ponctual Lights: On';
+        } else {
+            document.getElementById('ponctualLights').innerText = 'Ponctual Lights: Off';
+        }
     }
 
-    handleSpotlight(toggle) {
-
+    handleSpotlights(event) {
+        if (event.detail.toggle) {
+            document.getElementById('spotlights').innerText = 'Spotlights: On';
+        } else {
+            document.getElementById('spotlights').innerText = 'Spotlights: Off';
+        }
     }
 }
