@@ -21,12 +21,12 @@ class MainScene {
 
     const box = new THREE.BoxGeometry(10, 10, 10);
 
-    const floor = new THREE.Mesh(box, new THREE.MeshStandardMaterial({
-      color: new THREE.Color('steelblue')
-    }));
+    const material = materialManager.meshLambertMaterial.clone();
+    material.color.set('steelblue');
+
+    const floor = new THREE.Mesh(box, material);
     floor.scale.set(100, 0.01, 100);
     floor.position.y = -0.5;
-    floor.castShadow = true;
     floor.receiveShadow = true;
     materialManager.addObject(floor);
 

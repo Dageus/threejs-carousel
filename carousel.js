@@ -6,7 +6,7 @@ import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.j
 
 // TODO usar ParametricGeometry porque era demasiado tarde para eu entender como isto funciona
 class Seats {
-    constructor(radius, height) {
+    constructor(radius, height, materialManager) {
         this.seatGroup = new THREE.Group();
 
         const numSeats = 8;
@@ -20,14 +20,17 @@ class Seats {
             const z = radius * Math.sin(angle);
 
 
-            const material = new THREE.MeshBasicMaterial({
-                color: Math.random() * 0xffffff,
-            });
+            const material = materialManager.meshLambertMaterial.clone();
+            material.color.set(Math.random() * 0xffffff);
 
             const seat = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.5, 5), material);
             
             seat.position.set(x, y, z); // Set position
             seat.rotation.y = angle; // Rotate seat to match angle
+            seat.castShadow = true;
+            seat.receiveShadow = true;
+
+            materialManager.addObject(seat);
 
             this.seatGroup.add(seat);
         }
@@ -38,19 +41,25 @@ class Seats {
 
 
 class InnerRing {
-    constructor() {
-        const material = new THREE.MeshBasicMaterial({
-            color: THREE.Color.NAMES.red,
-        });
+    constructor(materialManager) {
+        let material = materialManager.meshLambertMaterial.clone();
+        material.color.set(new THREE.Color('red'));
+
         this.innerRing = new THREE.Group();
         
         this.upperRing = new THREE.Mesh(new THREE.RingGeometry(5, 15), material);
         this.upperRing.rotateOnAxis(new THREE.Vector3(-1, 0, 0), Math.PI / 2);
         this.upperRing.position.y = 30;
+        this.upperRing.castShadow = true;
+        this.upperRing.receiveShadow = true;
+        materialManager.addObject(this.upperRing);
         
         this.lowerRing = new THREE.Mesh(new THREE.RingGeometry(5, 15), material);
         this.lowerRing.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
         this.lowerRing.position.y = 20;
+        this.lowerRing.castShadow = true;
+        this.lowerRing.receiveShadow = true;
+        materialManager.addObject(this.lowerRing);
 
         let path = new THREE.CatmullRomCurve3([
             new THREE.Vector3(0, 20, 0), // Start point (bottom)
@@ -58,8 +67,11 @@ class InnerRing {
         ]);
 
         this.outerWall = new THREE.Mesh(new THREE.TubeGeometry(path, 20, 15, 30, false), material);
+        this.outerWall.receiveShadow = true;
+        this.outerWall.castShadow = true;
+        materialManager.addObject(this.outerWall);
 
-        this.seats = new Seats(10, 30).seatGroup;
+        this.seats = new Seats(10, 30, materialManager).seatGroup;
 
         this.innerRing.add(this.upperRing, this.lowerRing, this.outerWall, this.seats);
     }
@@ -67,19 +79,25 @@ class InnerRing {
 }
 
 class MiddleRing {
-    constructor() {
-        const material = new THREE.MeshBasicMaterial({
-            color: THREE.Color.NAMES.green,
-        });
+    constructor(materialManager) {
+        let material = materialManager.meshLambertMaterial.clone();
+        material.color.set(new THREE.Color('green'));
+
         this.middleRing = new THREE.Group();
         
         this.upperRing = new THREE.Mesh(new THREE.RingGeometry(15, 25), material);
         this.upperRing.rotateOnAxis(new THREE.Vector3(-1, 0, 0), Math.PI / 2);
         this.upperRing.position.y = 20;
+        this.upperRing.castShadow = true;
+        this.upperRing.receiveShadow = true;
+        materialManager.addObject(this.upperRing);
         
         this.lowerRing = new THREE.Mesh(new THREE.RingGeometry(15, 25), material);
         this.lowerRing.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
         this.lowerRing.position.y = 10;
+        this.lowerRing.receiveShadow = true;
+        this.lowerRing.castShadow = true;
+        materialManager.addObject(this.lowerRing);
 
         let path = new THREE.CatmullRomCurve3([
             new THREE.Vector3(0, 10, 0), // Start point (bottom)
@@ -87,8 +105,11 @@ class MiddleRing {
         ]);
 
         this.outerWall = new THREE.Mesh(new THREE.TubeGeometry(path, 20, 25, 30, false), material);
+        this.outerWall.castShadow = true;
+        this.outerWall.receiveShadow = true;
+        materialManager.addObject(this.outerWall);
         
-        this.seats = new Seats(20, 20).seatGroup;
+        this.seats = new Seats(20, 20, materialManager).seatGroup;
 
         this.middleRing.add(this.upperRing, this.lowerRing, this.outerWall, this.seats);
     }
@@ -96,19 +117,25 @@ class MiddleRing {
 }
 
 class OuterRing {
-    constructor() {
-        const material = new THREE.MeshBasicMaterial({
-            color: THREE.Color.NAMES.blue,
-        });
+    constructor(materialManager) {
+        let material = materialManager.meshLambertMaterial.clone();
+        material.color.set(new THREE.Color('blue'));
+
         this.outerRing = new THREE.Group();
         
         this.upperRing = new THREE.Mesh(new THREE.RingGeometry(25, 35), material);
         this.upperRing.rotateOnAxis(new THREE.Vector3(-1, 0, 0), Math.PI / 2);
         this.upperRing.position.y = 10;
+        this.upperRing.receiveShadow = true;
+        this.upperRing.castShadow = true;
+        materialManager.addObject(this.upperRing);
         
         this.lowerRing = new THREE.Mesh(new THREE.RingGeometry(15, 25), material);
         this.lowerRing.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
         this.lowerRing.position.y = 0;
+        this.lowerRing.receiveShadow = true;
+        this.lowerRing.castShadow = true;
+        materialManager.addObject(this.lowerRing);
 
         let path = new THREE.CatmullRomCurve3([
             new THREE.Vector3(0, 0, 0), // Start point (bottom)
@@ -116,8 +143,11 @@ class OuterRing {
         ]);
 
         this.outerWall = new THREE.Mesh(new THREE.TubeGeometry(path, 20, 35, 30, false), material);
+        this.outerWall.castShadow = true;
+        this.outerWall.receiveShadow = true;
+        materialManager.addObject(this.outerWall);
         
-        this.seats = new Seats(30, 10).seatGroup;
+        this.seats = new Seats(30, 10, materialManager).seatGroup;
 
         this.outerRing.add(this.upperRing, this.lowerRing, this.outerWall, this.seats);
     }
@@ -131,9 +161,12 @@ class Pillar {
             new THREE.Vector3(0, 50, 0)   // End point (top)
         ]);
 
-        let material = materialManager.meshLambertMaterial;
-        material.color = new THREE.Color('red');
+        let material = materialManager.meshLambertMaterial.clone();
+        material.color = new THREE.Color('yellow');
         this.pillar = new THREE.Mesh(new THREE.TubeGeometry(path, 20, 5, 8, false), material);
+        this.pillar.castShadow = true;
+        this.pillar.receiveShadow = true;
+
         materialManager.addObject(this.pillar);
     }
 }
@@ -145,9 +178,9 @@ class Carousel {
 
     this.pillar = new Pillar(materialManager).pillar;
 
-    this.outerRing = new OuterRing().outerRing;
-    this.middleRing = new MiddleRing().middleRing; 
-    this.innerRing = new InnerRing().innerRing;
+    this.outerRing = new OuterRing(materialManager).outerRing;
+    this.middleRing = new MiddleRing(materialManager).middleRing; 
+    this.innerRing = new InnerRing(materialManager).innerRing;
 
     this.carouselGroup.add(this.pillar, this.outerRing, this.middleRing, this.innerRing);
   }

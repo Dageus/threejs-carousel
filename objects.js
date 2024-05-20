@@ -4,11 +4,11 @@ export class Materials {
     constructor() {
         this.objectsDict = [];
 
-        this.meshLambertMaterial = new THREE.MeshLambertMaterial({ color: THREE.Color.NAMES.blue });
-        this.meshPhongMaterial = new THREE.MeshPhongMaterial({ color: THREE.Color.NAMES.green });
-        this.meshToonMaterial = new THREE.MeshToonMaterial({ color: THREE.Color.NAMES.yellow });
+        this.meshLambertMaterial = new THREE.MeshLambertMaterial();
+        this.meshPhongMaterial = new THREE.MeshPhongMaterial();
+        this.meshToonMaterial = new THREE.MeshToonMaterial();
         this.meshNormalMaterial = new THREE.MeshNormalMaterial();
-        this.meshBasicMaterial = new THREE.MeshBasicMaterial({ color: THREE.Color.NAMES.pink });
+        this.meshBasicMaterial = new THREE.MeshBasicMaterial();
 
         document.addEventListener("changeToGouraudEvent", this.handleChangeToGouraud.bind(this));
         document.addEventListener("changeToPhongEvent", this.handleChangeToGouraud.bind(this));
@@ -45,8 +45,8 @@ export class Materials {
 
     changeAllObjects(material) {
         this.objectsDict.forEach(item => {
-            item.object.material = material;
-            item.object.material.color = item.color;
+            item.object.material = material.clone();
+            item.object.material.color.set(item.color);
         });
     }
 }
@@ -54,13 +54,12 @@ export class Materials {
 export class Lights {
     constructor() {
         this.directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        this.directionalLight.position.set(20, 20, 20);
+        this.directionalLight.position.set(10, 10, -5);
         this.directionalLight.lookAt(0, 0, 0);
         this.directionalLight.castShadow = true;
-
         this.lightsGroup = new THREE.Group();
 
-        const ambientLight = new THREE.AmbientLight(THREE.Color.NAMES.orangered, 0.4); 
+        const ambientLight = new THREE.AmbientLight(new THREE.Color('orangered'), 0.1); 
 
         this.lightsGroup.add(ambientLight, this.directionalLight);
 
