@@ -17,6 +17,7 @@ export default class Mobius {
         console.log("Created ponctual light");
         let ponctualLight = this.createPonctualLight();
         ponctualLight.position.set(Math.cos(a), Math.sin(a * 5) / 30, Math.sin(a));
+        ponctualLight.position.multiplyScalar(radius);
         this.ponctualLights.add(ponctualLight);
       }
 
@@ -39,7 +40,7 @@ export default class Mobius {
   }
 
   createPonctualLight() {
-    const pointLight = new THREE.PointLight(0xff0000, 1, 150);
+    const pointLight = new THREE.PointLight(new THREE.Color('white'), 100, 150);
     pointLight.castShadow = true;
     pointLight.shadow.mapSize.width = 1024;
     pointLight.shadow.mapSize.height = 1024;

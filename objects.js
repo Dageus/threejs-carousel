@@ -79,7 +79,7 @@ export class Lights {
         this.directionalLight.shadow.camera.top = 50;
         this.directionalLight.shadow.camera.bottom = -50;
 
-        this.ponctualLights = pointLights;
+        this.pointLights = pointLights;
 
         this.lightsGroup = new THREE.Group();
 
@@ -107,8 +107,14 @@ export class Lights {
 
     handlePointLights(event) {
         if (event.detail.toggle) {
+            this.pointLights.children.forEach(pointLight => {
+                pointLight.intensity = 100;
+            })
             document.getElementById('pointLights').innerText = 'Point Lights: On';
         } else {
+            this.pointLights.children.forEach(pointLight => {
+                pointLight.intensity = 0;
+            })
             document.getElementById('pointLights').innerText = 'Point Lights: Off';
         }
     }
