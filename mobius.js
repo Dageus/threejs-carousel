@@ -2,8 +2,7 @@ import * as THREE from 'three';
 
 export default class Mobius {
   constructor(materialManager) {
-    this.ponctualLights = new THREE.Group();
-
+    this.pointLights = [];
     const count = 256 * 2;
     const radius = 17;
     const box = new THREE.BoxGeometry(10, 10, 10);
@@ -15,10 +14,11 @@ export default class Mobius {
       // Add ponctual light
       if (i % (count / 8) === 0) {
         console.log("Created ponctual light");
-        let ponctualLight = this.createPonctualLight();
-        ponctualLight.position.set(Math.cos(a), Math.sin(a * 5) / 30, Math.sin(a));
-        ponctualLight.position.multiplyScalar(radius);
-        this.ponctualLights.add(ponctualLight);
+        let pointLight = this.createPonctualLight();
+        pointLight.position.set(Math.cos(a), Math.sin(a * 5) / 30, Math.sin(a));
+        pointLight.position.multiplyScalar(radius);
+        this.pointLights.push(pointLight);
+        this.strip.add(pointLight);
       }
 
       const o = new THREE.Object3D();
@@ -36,11 +36,10 @@ export default class Mobius {
       o.add(mesh)
       materialManager.addObject(mesh);
     }
-    this.strip.add(this.ponctualLights);
   }
 
   createPonctualLight() {
-    const pointLight = new THREE.PointLight(new THREE.Color('white'), 100, 150);
+    const pointLight = new THREE.PointLight(new THREE.Color('white'), 50, 150);
     pointLight.castShadow = true;
     pointLight.shadow.mapSize.width = 1024;
     pointLight.shadow.mapSize.height = 1024;

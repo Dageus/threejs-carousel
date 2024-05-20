@@ -6,10 +6,13 @@ import * as THREE from "three";
 class Seats {
     constructor(radius, height, materialManager) {
         this.seatGroup = new THREE.Group();
+        this.spotlights = [];
 
         const numSeats = 8;
         const angleIncrement = (2 * Math.PI) / numSeats;
 
+        const material = materialManager.meshLambertMaterial.clone();
+        material.color.set(Math.random() * 0xffffff);
         for (let i = 0; i < numSeats; i++){
             const angle = i * angleIncrement;
 
@@ -17,24 +20,32 @@ class Seats {
             const y = height + 2.5;
             const z = radius * Math.sin(angle);
 
-
-            const material = materialManager.meshLambertMaterial.clone();
-            material.color.set(Math.random() * 0xffffff);
-
             const seat = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.5, 5), material);
             
-            seat.position.set(x, y, z); // Set position
-            seat.rotation.y = angle; // Rotate seat to match angle
+            seat.position.set(x, y, z); 
+            seat.rotation.y = angle; 
             seat.castShadow = true;
             seat.receiveShadow = true;
 
             materialManager.addObject(seat);
+            let spotlightObject = this.createSpotlight();
 
-            this.seatGroup.add(seat);
+            spotlightObject.spotLight.position.set(x, height - 2.5, z);
+            spotlightObject.targetObject.position.set(x, height, z);
+            this.spotlights.push(spotlightObject.spotLight);
+
+            this.seatGroup.add(seat, spotlightObject.spotLight, spotlightObject.targetObject);
         }
-
     }
 
+    createSpotlight() {
+        const spotLight = new THREE.SpotLight(new THREE.Color('white'), 100);
+        const targetObject = new THREE.Object3D();
+        
+        spotLight.target = targetObject;
+
+        return { spotLight, targetObject };
+    }
 }
 
 
@@ -69,9 +80,10 @@ class InnerRing {
         this.outerWall.castShadow = true;
         materialManager.addObject(this.outerWall);
 
-        this.seats = new Seats(10, 30, materialManager).seatGroup;
+        this.seats = new Seats(10, 30, materialManager);
+        this.spotlights = this.seats.spotlights;
 
-        this.innerRing.add(this.upperRing, this.lowerRing, this.outerWall, this.seats);
+        this.innerRing.add(this.upperRing, this.lowerRing, this.outerWall, this.seats.seatGroup);
     }
 
 }
@@ -107,9 +119,10 @@ class MiddleRing {
         this.outerWall.receiveShadow = true;
         materialManager.addObject(this.outerWall);
         
-        this.seats = new Seats(20, 20, materialManager).seatGroup;
+        this.seats = new Seats(20, 20, materialManager);
+        this.spotlights = this.seats.spotlights;
 
-        this.middleRing.add(this.upperRing, this.lowerRing, this.outerWall, this.seats);
+        this.middleRing.add(this.upperRing, this.lowerRing, this.outerWall, this.seats.seatGroup);
     }
 
 }
@@ -145,9 +158,10 @@ class OuterRing {
         this.outerWall.receiveShadow = true;
         materialManager.addObject(this.outerWall);
         
-        this.seats = new Seats(30, 10, materialManager).seatGroup;
+        this.seats = new Seats(30, 10, materialManager);
+        this.spotlights = this.seats.spotlights;
 
-        this.outerRing.add(this.upperRing, this.lowerRing, this.outerWall, this.seats);
+        this.outerRing.add(this.upperRing, this.lowerRing, this.outerWall, this.seats.seatGroup);
     }
 }
 
@@ -175,11 +189,14 @@ export default class Carousel {
 
     this.pillar = new Pillar(materialManager).pillar;
 
-    this.outerRing = new OuterRing(materialManager).outerRing;
-    this.middleRing = new MiddleRing(materialManager).middleRing; 
-    this.innerRing = new InnerRing(materialManager).innerRing;
+    this.outerRing = new OuterRing(materialManager);
+    this.middleRing = new MiddleRing(materialManager); 
+    this.innerRing = new InnerRing(materialManager);
+    this.spotlights = new THREE.Group();
+    this.spotlights = [];
+    this.spotlights = [...this.outerRing.spotlights, ...this.middleRing.spotlights, ...this.innerRing.spotlights];
 
-    this.carouselGroup.add(this.pillar, this.outerRing, this.middleRing, this.innerRing);
+    this.carouselGroup.add(this.pillar, this.outerRing.outerRing, this.middleRing.middleRing, this.innerRing.innerRing);
   }
 
 }

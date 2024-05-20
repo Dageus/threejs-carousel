@@ -63,7 +63,7 @@ export class Materials {
 }
 
 export class Lights {
-    constructor(pointLights) {
+    constructor(pointLights, spotlights) {
         this.directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         this.directionalLight.position.set(80, 80, 0);
         this.directionalLight.lookAt(0, 0, 0);
@@ -80,6 +80,7 @@ export class Lights {
         this.directionalLight.shadow.camera.bottom = -50;
 
         this.pointLights = pointLights;
+        this.spotlights = spotlights;
 
         this.lightsGroup = new THREE.Group();
 
@@ -107,12 +108,12 @@ export class Lights {
 
     handlePointLights(event) {
         if (event.detail.toggle) {
-            this.pointLights.children.forEach(pointLight => {
-                pointLight.intensity = 100;
+            this.pointLights.forEach(pointLight => {
+                pointLight.intensity = 50;
             })
             document.getElementById('pointLights').innerText = 'Point Lights: On';
         } else {
-            this.pointLights.children.forEach(pointLight => {
+            this.pointLights.forEach(pointLight => {
                 pointLight.intensity = 0;
             })
             document.getElementById('pointLights').innerText = 'Point Lights: Off';
@@ -121,8 +122,14 @@ export class Lights {
 
     handleSpotlights(event) {
         if (event.detail.toggle) {
+            this.spotlights.forEach(spotlight =>{
+                spotlight.intensity = 50;
+            });
             document.getElementById('spotlights').innerText = 'Spotlights: On';
         } else {
+            this.spotlights.forEach(spotlight =>{
+                spotlight.intensity = 0;
+        });
             document.getElementById('spotlights').innerText = 'Spotlights: Off';
         }
     }

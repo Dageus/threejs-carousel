@@ -61,6 +61,6 @@ let materialManager = new Materials();  // EVERY OBJECT3D SHOULD BE ADDED TO THI
 
 let carousel = new Carousel(materialManager);
 let mobius = new Mobius(materialManager)
-let lights = new Lights(mobius.ponctualLights, spotlights);
+let lights = new Lights(mobius.pointLights, carousel.spotlights);
 let mainScene = new MainScene(carousel.carouselGroup, mobius.strip, lights.lightsGroup, materialManager);
 mainScene.animate();
