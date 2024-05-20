@@ -63,11 +63,24 @@ export class Materials {
 }
 
 export class Lights {
-    constructor() {
+    constructor(pointLights) {
         this.directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        this.directionalLight.position.set(10, 10, -5);
+        this.directionalLight.position.set(80, 80, 0);
         this.directionalLight.lookAt(0, 0, 0);
+        this.directionalLight.near
         this.directionalLight.castShadow = true;
+
+        this.directionalLight.shadow.mapSize.width = 1024;
+        this.directionalLight.shadow.mapSize.height = 1024; 
+        this.directionalLight.shadow.camera.near = 0.5;
+        this.directionalLight.shadow.camera.far = 500; 
+        this.directionalLight.shadow.camera.left = -50;
+        this.directionalLight.shadow.camera.right = 50;
+        this.directionalLight.shadow.camera.top = 50;
+        this.directionalLight.shadow.camera.bottom = -50;
+
+        this.ponctualLights = pointLights;
+
         this.lightsGroup = new THREE.Group();
 
         const ambientLight = new THREE.AmbientLight(new THREE.Color('orangered'), 0.1); 
@@ -75,11 +88,11 @@ export class Lights {
         this.lightsGroup.add(ambientLight, this.directionalLight);
 
         document.addEventListener("toggleDirectionalLight", this.handleDirectionalLight.bind(this));
-        document.addEventListener("togglePonctualLights", this.handlePonctualLights.bind(this));
+        document.addEventListener("togglePointLights", this.handlePointLights.bind(this));
         document.addEventListener("toggleSpotlights", this.handleSpotlights.bind(this));
         document.getElementById('directionalLight').innerText = 'Directional Light: On';
         document.getElementById('spotlights').innerText = 'Spotlights: On';
-        document.getElementById('ponctualLights').innerText = 'Ponctual Lights: On';
+        document.getElementById('pointLights').innerText = 'Point Lights: On';
     }
 
     handleDirectionalLight(event) {
@@ -92,11 +105,11 @@ export class Lights {
         }
     }
 
-    handlePonctualLights(event) {
+    handlePointLights(event) {
         if (event.detail.toggle) {
-            document.getElementById('ponctualLights').innerText = 'Ponctual Lights: On';
+            document.getElementById('pointLights').innerText = 'Point Lights: On';
         } else {
-            document.getElementById('ponctualLights').innerText = 'Ponctual Lights: Off';
+            document.getElementById('pointLights').innerText = 'Point Lights: Off';
         }
     }
 

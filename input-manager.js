@@ -8,8 +8,8 @@ export class InputManager {
         this.directionalLightToggle = true;
         this.directionalLightKeyUp = true;
 
-        this.ponctualLightsToggle = true;
-        this.ponctualLightsKeyUp = true;
+        this.pointLightsToggle = true;
+        this.pointLightsKeyUp = true;
 
         this.spotlightsToggle = true;
         this.spotlightsKeyUp = true;
@@ -63,7 +63,7 @@ export class InputManager {
                 this.directionalLightKeyUp = true;
                 break;
             case "KeyP":
-                this.ponctualLightsKeyUp = true;
+                this.pointLightsKeyUp = true;
                 break;
             case "KeyS":
                 this.spotlightsKeyUp = true;
@@ -116,14 +116,14 @@ export class InputManager {
     }
 
     dispatchPonctualLightsEvent() {
-        if (!this.ponctualLightsKeyUp) {
+        if (!this.pointLightsKeyUp) {
             return;
         }
 
-        this.ponctualLightsToggle = !this.ponctualLightsToggle;
-        const costumEvent = new CustomEvent("togglePonctualLights", {detail: {toggle: this.ponctualLightsToggle }});
+        this.pointLightsToggle = !this.pointLightsToggle;
+        const costumEvent = new CustomEvent("togglePointLights", {detail: {toggle: this.pointLightsToggle }});
         document.dispatchEvent(costumEvent);
-        this.ponctualLightsKeyUp = false;
+        this.pointLightsKeyUp = false;
     }
 
     dispatchSpotilghtsEvent() {

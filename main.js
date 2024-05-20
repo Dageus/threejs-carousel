@@ -5,7 +5,7 @@ import { InputManager } from './input-manager';
 import { Lights, Materials } from './objects';
 
 class MainScene {
-  constructor(carousel, lights, materialManager) {
+  constructor(carousel, mobiusStrip, lights, materialManager) {
     this.renderer = new THREE.WebGLRenderer({
       antialias: true
     });
@@ -19,18 +19,19 @@ class MainScene {
     this.clock = new THREE.Clock();
     this.scene = new THREE.Scene();
 
-    const box = new THREE.BoxGeometry(10, 10, 10);
-
     const material = materialManager.meshLambertMaterial.clone();
     material.color.set('steelblue');
 
+    const box = new THREE.BoxGeometry(10, 10, 10);
     const floor = new THREE.Mesh(box, material);
     floor.scale.set(100, 0.01, 100);
     floor.position.y = -0.5;
     floor.receiveShadow = true;
     materialManager.addObject(floor);
 
-    this.scene.add(floor, lights, carousel)
+    mobiusStrip.position.set(0, 55, 0);
+    mobiusStrip.rotateY(Math.PI / 2);
+    this.scene.add(floor, lights, carousel, mobiusStrip);
 
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.camera.position.set(75, 90, 75);
@@ -58,7 +59,8 @@ class MainScene {
 new InputManager();
 let materialManager = new Materials();  // EVERY OBJECT3D SHOULD BE ADDED TO THIS
 
-let lights = new Lights();
 let carousel = new Carousel(materialManager);
-let mainScene = new MainScene(carousel.carouselGroup, lights.lightsGroup, materialManager);
+let mobius = new Mobius(materialManager)
+let lights = new Lights(mobius.ponctualLights, spotlights);
+let mainScene = new MainScene(carousel.carouselGroup, mobius.strip, lights.lightsGroup, materialManager);
 mainScene.animate();

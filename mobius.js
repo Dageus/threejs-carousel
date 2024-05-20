@@ -1,46 +1,50 @@
 import * as THREE from 'three';
 
-export default function Mobius(scene, box) {
+export default class Mobius {
+  constructor(materialManager) {
+    this.ponctualLights = new THREE.Group();
 
-  function MobiusSpotlight(scene) {
-    const spotLight = new THREE.SpotLight('white', 0.7);
-    spotLight.castShadow = true;
-    spotLight.position.set(0, 1, 0);
-    spotLight.shadow.mapSize.width = 1024;
-    spotLight.shadow.mapSize.height = 1024;
-    spotLight.shadow.camera.near = 0.1;
-    spotLight.shadow.camera.far = 5;
-    scene.add(spotLight);
-  }
-
-  function MobiusStrip(scene, box) {
-
-    const count = 256;
-    const radius = 1.1;
+    const count = 256 * 2;
+    const radius = 17;
+    const box = new THREE.BoxGeometry(10, 10, 10);
     this.strip = new THREE.Object3D();
-    scene.add(this.strip);
+
     for (let i = 0; i < count; i++) {
       const a = Math.PI / count * 2 * i;
+
+      // Add ponctual light
+      if (i % (count / 8) === 0) {
+        console.log("Created ponctual light");
+        let ponctualLight = this.createPonctualLight();
+        ponctualLight.position.set(Math.cos(a), Math.sin(a * 5) / 30, Math.sin(a));
+        this.ponctualLights.add(ponctualLight);
+      }
+
       const o = new THREE.Object3D();
       o.position.set(Math.cos(a), Math.sin(a * 5) / 30, Math.sin(a))
       o.position.multiplyScalar(radius);
-      o.lookAt(scene.position);
+      o.lookAt(0, 0, 0);
       this.strip.add(o);
-      const mat = new THREE.MeshPhongMaterial({
-        color: new THREE.Color(`hsl(${a * 360 / Math.PI},55%,55%)`)
-      });
+      const mat = materialManager.meshLambertMaterial.clone();
+      mat.color.set(new THREE.Color(`hsl(${a * 360 / Math.PI},55%,55%)`));
       const mesh = new THREE.Mesh(box, mat);
       mesh.scale.set(0.03, 0.3, 0.001)
       mesh.castShadow = true;
-      //mesh.receiveShadow  = true;
+      mesh.receiveShadow  = true;
       mesh.rotation.x = a / 2;
       o.add(mesh)
+      materialManager.addObject(mesh);
     }
-
-
+    this.strip.add(this.ponctualLights);
   }
 
-
-  this.MobiusStrip = new MobiusStrip(scene, box);
-  this.Spotlight = new MobiusSpotlight(scene);
+  createPonctualLight() {
+    const pointLight = new THREE.PointLight(0xff0000, 1, 150);
+    pointLight.castShadow = true;
+    pointLight.shadow.mapSize.width = 1024;
+    pointLight.shadow.mapSize.height = 1024;
+    pointLight.shadow.camera.near = 0.1;
+    pointLight.shadow.camera.far = 50;
+    return pointLight;
+  }
 }

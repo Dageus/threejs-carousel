@@ -1,7 +1,5 @@
 
 import * as THREE from "three";
-import { ThreeMFLoader } from "three/examples/jsm/Addons.js";
-import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js';
 //'use strict';
 
 // TODO usar ParametricGeometry porque era demasiado tarde para eu entender como isto funciona
@@ -151,7 +149,6 @@ class OuterRing {
 
         this.outerRing.add(this.upperRing, this.lowerRing, this.outerWall, this.seats);
     }
-
 }
 
 class Pillar {
@@ -172,7 +169,7 @@ class Pillar {
 }
 
 
-class Carousel {
+export default class Carousel {
   constructor(materialManager) {
     this.carouselGroup = new THREE.Group();
 
@@ -186,5 +183,3 @@ class Carousel {
   }
 
 }
-
-export default Carousel;
