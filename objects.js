@@ -52,11 +52,17 @@ export class Materials {
 }
 
 export class Lights {
-    constructor(scene) {
+    constructor() {
         this.directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         this.directionalLight.position.set(20, 20, 20);
         this.directionalLight.lookAt(0, 0, 0);
-        scene.add(this.directionalLight);
+        this.directionalLight.castShadow = true;
+
+        this.lightsGroup = new THREE.Group();
+
+        const ambientLight = new THREE.AmbientLight(THREE.Color.NAMES.orangered, 0.4); 
+
+        this.lightsGroup.add(ambientLight, this.directionalLight);
 
         document.addEventListener("toggleDirectionalLight", this.handleDirectionalLight.bind(this));
         document.addEventListener("togglePonctualLights", this.handlePonctualLights.bind(this));

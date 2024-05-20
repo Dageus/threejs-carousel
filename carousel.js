@@ -125,26 +125,25 @@ class OuterRing {
 }
 
 class Pillar {
-    constructor(material) {
+    constructor(materialManager) {
         let path = new THREE.CatmullRomCurve3([
             new THREE.Vector3(0, 0, 0), // Start point (bottom)
             new THREE.Vector3(0, 50, 0)   // End point (top)
         ]);
 
+        let material = materialManager.meshLambertMaterial;
+        material.color = new THREE.Color('red');
         this.pillar = new THREE.Mesh(new THREE.TubeGeometry(path, 20, 5, 8, false), material);
+        materialManager.addObject(this.pillar);
     }
 }
 
 
 class Carousel {
-  constructor() {
-    const material = new THREE.MeshBasicMaterial({
-      color: THREE.Color.NAMES.grey,
-    });
-
+  constructor(materialManager) {
     this.carouselGroup = new THREE.Group();
 
-    this.pillar = new Pillar(material).pillar;
+    this.pillar = new Pillar(materialManager).pillar;
 
     this.outerRing = new OuterRing().outerRing;
     this.middleRing = new MiddleRing().middleRing; 
