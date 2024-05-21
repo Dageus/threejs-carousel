@@ -13,6 +13,7 @@ class MainScene {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.xr.enabled = true; 
 
     document.body.appendChild(this.renderer.domElement);
     window.addEventListener("resize", this.resize.bind(this));
@@ -37,13 +38,7 @@ class MainScene {
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.camera.position.set(75, 90, 75);
     this.camera.lookAt(0, 0, 0);
-
-    this.stereoCamera = new THREE.StereoCamera();
-    this.stereoCamera.aspect = window.innerWidth / window.innerHeight;
-    this.stereoCamera.cameraL.position.copy(this.camera.position);
-    this.stereoCamera.cameraL.quaternion.copy(this.camera.quaternion);
-    this.stereoCamera.cameraR.position.copy(this.camera.position);
-    this.stereoCamera.cameraR.quaternion.copy(this.camera.quaternion);
+    this.scene.add(this.camera);
 
     // Skydome
     const skyGeo = new THREE.SphereGeometry(200, 25, 25); 
@@ -67,25 +62,7 @@ class MainScene {
   }
 
   animate() {
-    if (!this.renderer.xr.isPresenting) {
-      this.renderer.render(this.scene, this.camera);
-    } else {
-      this.renderer.clear();
-
-      this.stereoCamera.aspect = window.innerWidth / window.innerHeight;
-
-      this.stereoCamera.cameraL.position.copy(this.camera.position);
-      this.stereoCamera.cameraL.quaternion.copy(this.camera.quaternion);
-      this.stereoCamera.cameraR.position.copy(this.camera.position);
-      this.stereoCamera.cameraR.quaternion.copy(this.camera.quaternion);
-
-      console.log(this.stereoCamera.cameraL.position, this.camera.position);
-      this.renderer.setViewport(0, 0, window.innerWidth / 2, window.innerHeight);
-      this.renderer.render(this.scene, this.stereoCamera.cameraL);
-
-      this.renderer.setViewport(window.innerWidth / 2, 0, window.innerWidth / 2, window.innerHeight);
-      this.renderer.render(this.scene, this.stereoCamera.cameraR);
-    }
+    this.renderer.render(this.scene, this.camera);
   }
  
   resize() {

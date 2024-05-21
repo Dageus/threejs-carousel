@@ -11,15 +11,15 @@ class Seats {
         const numSeats = 8;
         const angleIncrement = (2 * Math.PI) / numSeats;
 
-        const material = materialManager.meshLambertMaterial.clone();
-        material.color.set(Math.random() * 0xffffff);
         for (let i = 0; i < numSeats; i++){
             const angle = i * angleIncrement;
-
+            
             const x = radius * Math.cos(angle);
             const y = height + 2.5;
             const z = radius * Math.sin(angle);
-
+            
+            const material = materialManager.meshLambertMaterial.clone();
+            material.color.set(Math.random() * 0xffffff);
             const seat = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.5, 5), material);
             
             seat.position.set(x, y, z); 
