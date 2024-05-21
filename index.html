@@ -1,132 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Carousel</title>
-    <style>
-      body {
-        margin: 0;
-      }
 
-      .container {
-        position: absolute;
-      }
-      .key {
-        position: relative;
-        display: inline-block;
-        padding: 5px;
-        width: 60px;
-        image-rendering: pixelated;
-      }
-	  #materialID {
-        position: fixed;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 10px;
-        border-radius: 5px;
-        }
-		#lightMaterial {
-        position: fixed;
-        top: 3.5%;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 10px;
-        border-radius: 5px;
-        }
-		#directionalLight {
-        position: fixed;
-        top: 7%;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 10px;
-        border-radius: 5px;
-        }
-		#spotlights {
-        position: fixed;
-        top: 10.5%;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 10px;
-        border-radius: 5px;
-        }
-		#pointLights {
-        position: fixed;
-        top: 14%;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 10px;
-        border-radius: 5px;
-        }
-    </style>
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <title>Carousel</title>
+  <style>
+    body {
+      margin: 0;
+    }
 
-  <body>
-	<div id="materialID"></div>
-	<div id="lightMaterial"></div>
-	<div id="directionalLight"></div>
-	<div id="spotlights"></div>
-	<div id="pointLights"></div>
-    <div class="container">
-      <div>
-        <img
-          id="KeyQ"
-          class="key"
-          src="./KeyQ-KeyNotPressed.png"
-          alt="key-pressed"
-        />
-        <img
-          id="KeyW"
-          class="key"
-          src="./KeyW-KeyNotPressed.png"
-          alt="key-pressed"
-        />
-        <img
-          id="KeyE"
-          class="key"
-          src="./KeyE-KeyNotPressed.png"
-          alt="key-pressed"
-        />
-        <img
-          id="KeyR"
-          class="key"
-          src="./KeyR-KeyNotPressed.png"
-          alt="key-pressed"
-        />
-	</div>
-	<div>
-		<img
-		id="KeyT"
-		class="key"
-		src="./KeyT-KeyNotPressed.png"
-		alt="key-pressed"
-	  />
-      </div>
-      <div>
-        <img
-          id="KeyS"
-          class="key"
-          src="./KeyS-KeyNotPressed.png"
-          alt="key-pressed"
-        />
-      <img
-        id="KeyD"
-        class="key"
-        src="./KeyD-KeyNotPressed.png"
-        alt="key-pressed"
-      />
-	  <img
-	  id="KeyP"
-	  class="key"
-	  src="./KeyP-KeyNotPressed.png"
-	  alt="key-pressed"
-	/>
-	</div>
-    <script type="module" src="/main.js"></script>
-  </body>
+    .container {
+      position: absolute;
+    }
+
+    .key {
+      position: relative;
+      display: inline-block;
+      padding: 5px;
+      width: 60px;
+      image-rendering: pixelated;
+    }
+
+    #materialID {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    #lightMaterial {
+      position: fixed;
+      top: 3.5%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    #directionalLight {
+      position: fixed;
+      top: 7%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    #spotlights {
+      position: fixed;
+      top: 10.5%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    #pointLights {
+      position: fixed;
+      top: 14%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="materialID"></div>
+  <div id="lightMaterial"></div>
+  <div id="directionalLight"></div>
+  <div id="spotlights"></div>
+  <div id="pointLights"></div>
+  <div class="container">
+    <div>
+      <img id="Digit1" class="key" src="./Digit1-KeyNotPressed.png" alt="key-pressed">
+      <img id="Digit2" class="key" src="./Digit2-KeyNotPressed.png" alt="key-pressed">
+      <img id="Digit3" class="key" src="./Digit3-KeyNotPressed.png" alt="key-pressed">
+    </div>
+    <div>
+      <img id="KeyQ" class="key" src="./KeyQ-KeyNotPressed.png" alt="key-pressed" />
+      <img id="KeyW" class="key" src="./KeyW-KeyNotPressed.png" alt="key-pressed" />
+      <img id="KeyE" class="key" src="./KeyE-KeyNotPressed.png" alt="key-pressed" />
+      <img id="KeyR" class="key" src="./KeyR-KeyNotPressed.png" alt="key-pressed" />
+    </div>
+    <div>
+      <img id="KeyT" class="key" src="./KeyT-KeyNotPressed.png" alt="key-pressed" />
+    </div>
+    <div>
+      <img id="KeyS" class="key" src="./KeyS-KeyNotPressed.png" alt="key-pressed" />
+      <img id="KeyD" class="key" src="./KeyD-KeyNotPressed.png" alt="key-pressed" />
+      <img id="KeyP" class="key" src="./KeyP-KeyNotPressed.png" alt="key-pressed" />
+    </div>
+  </div>
+  <script type="module" src="/main.js"></script>
+</body>
+
 </html>
