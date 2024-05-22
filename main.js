@@ -13,7 +13,7 @@ class MainScene {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.xr.enabled = true; 
+    this.renderer.xr.enabled = true;
 
     document.body.appendChild(this.renderer.domElement);
     window.addEventListener("resize", this.resize.bind(this));
@@ -44,12 +44,12 @@ class MainScene {
     this.originalCameraRotation = this.camera.rotation.clone();
 
     // Skydome
-    const skyGeo = new THREE.SphereGeometry(200, 25, 25); 
-    let loader  = new THREE.TextureLoader(),
-        texture = loader.load( "space.jpeg" );
+    const skyGeo = new THREE.SphereGeometry(200, 25, 25);
+    let loader = new THREE.TextureLoader(),
+      texture = loader.load("space.jpeg");
 
-    let skydomeMaterial = new THREE.MeshBasicMaterial({ 
-          map: texture,
+    let skydomeMaterial = new THREE.MeshBasicMaterial({
+      map: texture,
     });
 
     let sky = new THREE.Mesh(skyGeo, skydomeMaterial);
@@ -58,7 +58,7 @@ class MainScene {
     this.scene.add(sky);
 
     // vr
-    document.body.appendChild( VRButton.createButton( this.renderer ) );
+    document.body.appendChild(VRButton.createButton(this.renderer));
     this.renderer.xr.enabled = true;
 
     this.renderer.setAnimationLoop(this.animate.bind(this));
@@ -68,7 +68,7 @@ class MainScene {
   animate() {
     this.renderer.render(this.scene, this.camera);
   }
- 
+
   resize() {
     console.log("Update window");
     const width = window.innerWidth;
