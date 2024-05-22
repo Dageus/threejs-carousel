@@ -38,7 +38,7 @@ export default class Mobius {
   }
 
   createPonctualLight() {
-    const pointLight = new THREE.PointLight(new THREE.Color('white'), 50, 150);
+    const pointLight = new THREE.PointLight(new THREE.Color('white'), 50, 50);
     pointLight.castShadow = true;
     pointLight.shadow.mapSize.width = 1024;
     pointLight.shadow.mapSize.height = 1024;

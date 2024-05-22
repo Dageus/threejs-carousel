@@ -54,7 +54,7 @@ class Seats {
   }
 
   createSpotlight() {
-    const spotLight = new THREE.SpotLight(new THREE.Color('white'), 100);
+    const spotLight = new THREE.SpotLight(new THREE.Color('white'), 150, 5);
     const targetObject = new THREE.Object3D();
 
     spotLight.target = targetObject;
