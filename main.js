@@ -4,14 +4,17 @@ import Carousel from './carousel';
 import { InputManager } from './input-manager';
 import { Lights, Materials } from './objects';
 import { VRButton } from 'three/addons/webxr/VRButton.js';
+import { RectAreaLightUniformsLib } from 'three/examples/jsm/Addons.js';
 
 class MainScene {
   constructor(carousel, mobiusStrip, lights, materialManager) {
+    "use strict";
     this.renderer = new THREE.WebGLRenderer({
       antialias: true
     });
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.xr.enabled = true;
 
@@ -20,6 +23,7 @@ class MainScene {
 
     this.clock = new THREE.Clock();
     this.scene = new THREE.Scene();
+    this.cameraGroup = new THREE.Group();
 
     const material = materialManager.meshLambertMaterial.clone();
     material.color.set('steelblue');
@@ -36,12 +40,13 @@ class MainScene {
     this.scene.add(floor, lights, carousel, mobiusStrip);
 
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    this.camera.position.set(75, 90, 75);
+    this.cameraGroup.add(this.camera);
+    this.cameraGroup.position.set(75, 90, 75);
     this.camera.lookAt(0, 0, 0);
-    this.scene.add(this.camera);
+    this.scene.add(this.cameraGroup);
 
-    this.originalCameraPosition = this.camera.position.clone();
-    this.originalCameraRotation = this.camera.rotation.clone();
+    this.originalCameraPosition = this.cameraGroup.position.clone();
+    this.originalCameraRotation = this.cameraGroup.rotation.clone();
 
     // Skydome
     const skyGeo = new THREE.SphereGeometry(200, 25, 25);
@@ -60,29 +65,45 @@ class MainScene {
     // vr
     document.body.appendChild(VRButton.createButton(this.renderer));
     this.renderer.xr.enabled = true;
+    this.renderer.xr.setReferenceSpaceType( 'local' );
+    this.sessionEnded = false;
 
-    this.renderer.setAnimationLoop(this.animate.bind(this));
     this.renderer.xr.addEventListener('sessionend', this.onSessionEnd.bind(this));
+    this.renderer.xr.addEventListener('sessionstart', this.onSessionStart.bind(this));
+    this.renderer.setAnimationLoop(this.animate.bind(this));
   }
 
   animate() {
+    "use strict";
+
+    if (this.sessionEnded) {
+      this.sessionEnded = false;
+      this.resize();
+    }
     this.renderer.render(this.scene, this.camera);
   }
 
   resize() {
     console.log("Update window");
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    this.renderer.setSize(width, height);
-    this.camera.aspect = width / height;
+    this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
+
+    this.renderer.setSize( window.innerWidth, window.innerHeight );
+  }
+  onSessionStart() {
+    this.cameraGroup.rotateY(Math.PI / 4);
+    this.cameraGroup.position.set(75, 1.6, 75);
   }
 
   onSessionEnd() {
-    console.log("jufnso");
-    this.camera.position.copy(this.originalCameraPosition);
-    this.camera.rotation.copy(this.originalCameraRotation);
-    this.camera.updateProjectionMatrix();
+    this.cameraGroup.position.set(this.originalCameraPosition.x, this.originalCameraPosition.y, this.originalCameraPosition.z);
+    this.cameraGroup.rotation.set(this.originalCameraRotation.x, this.originalCameraRotation.y, this.originalCameraRotation.z);
+    this.camera.fov = 75;
+    this.camera.near = 0.1;
+    this.camera.far = 1000;
+    this.camera.lookAt(0, 0, 0);
+    
+    this.sessionEnded = true;
   }
 }
 
