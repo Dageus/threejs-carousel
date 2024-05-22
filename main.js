@@ -40,6 +40,9 @@ class MainScene {
     this.camera.lookAt(0, 0, 0);
     this.scene.add(this.camera);
 
+    this.originalCameraPosition = this.camera.position.clone();
+    this.originalCameraRotation = this.camera.rotation.clone();
+
     // Skydome
     const skyGeo = new THREE.SphereGeometry(200, 25, 25); 
     let loader  = new THREE.TextureLoader(),
@@ -59,6 +62,7 @@ class MainScene {
     this.renderer.xr.enabled = true;
 
     this.renderer.setAnimationLoop(this.animate.bind(this));
+    this.renderer.xr.getSession().addEventListener('end', this.onSessionEnd.bind(this));
   }
 
   animate() {
@@ -71,6 +75,12 @@ class MainScene {
     const height = window.innerHeight;
     this.renderer.setSize(width, height);
     this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
+  }
+
+  onSessionEnd() {
+    this.camera.position.copy(this.originalCameraPosition);
+    this.camera.rotation.copy(this.originalCameraRotation);
     this.camera.updateProjectionMatrix();
   }
 }
