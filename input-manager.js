@@ -13,6 +13,12 @@ export class InputManager {
 
         this.spotlightsToggle = true;
         this.spotlightsKeyUp = true;
+                                              
+        this.moveOuterRing = false;
+
+        this.moveMiddleRing = false;
+
+        this.moveInnerRing = false;
 
         document.addEventListener("keydown", this.handleKeyDown.bind(this));
         document.addEventListener("keyup", this.handleKeyUp.bind(this));
@@ -20,6 +26,15 @@ export class InputManager {
 
     handleKeyDown(event) {
         switch (event.code) {
+            case "Digit1":
+                this.dispatchMoveOuterRingEvent(true);
+                break;
+            case "Digit2":
+                this.dispatchMoveMiddleRingEvent(true);
+                break;
+            case "Digit3":
+                this.dispatchMoveInnerRingEvent(true);
+                break;
             case "KeyQ":
                 this.dispatchMaterialEvent(MaterialEvent.Gouraud);
                 break;
@@ -56,6 +71,15 @@ export class InputManager {
 
     handleKeyUp(event) {
         switch (event.code) {
+            case "Digit1":
+                this.dispatchMoveOuterRingEvent(false);
+                break;
+            case "Digit2":
+                this.dispatchMoveMiddleRingEvent(false);
+                break;
+            case "Digit3":
+                this.dispatchMoveInnerRingEvent(false);
+                break;
             case "KeyT":
                 this.lightMaterialKeyUp = true;
                 break;
@@ -76,6 +100,36 @@ export class InputManager {
         if (imgElement) {
             imgElement.src = `./${event.code}-KeyNotPressed.png`;
         }
+    }
+
+    dispatchMoveOuterRingEvent(move) {
+        if (move === this.moveOuterRing) {
+            return;
+        }
+
+        this.moveOuterRing = move;
+        const moveOuterRing = new CustomEvent("moveOuterRing", { detail: { move: move } });
+        document.dispatchEvent(moveOuterRing);
+    }
+
+    dispatchMoveMiddleRingEvent(move) {
+        if (move === this.moveMiddleRing) {
+            return;
+        }
+
+        this.moveMiddleRing = move;
+        const moveMiddleRing = new CustomEvent("moveMiddleRing", { detail: { move: move } });
+        document.dispatchEvent(moveMiddleRing);
+    }
+
+    dispatchMoveInnerRingEvent(move) {
+        if (move === this.moveInnerRing) {
+            return;
+        }
+
+        this.moveInnerRing = move;
+        const moveInnerRing = new CustomEvent("moveInnerRing", { detail: { move: move } });
+        document.dispatchEvent(moveInnerRing);
     }
 
     dispatchMaterialEvent(materialEvent) {

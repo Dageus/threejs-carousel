@@ -4,11 +4,11 @@ export class Materials {
     constructor() {
         this.objectsDict = [];
 
-        this.meshLambertMaterial = new THREE.MeshLambertMaterial();
-        this.meshPhongMaterial = new THREE.MeshPhongMaterial();
-        this.meshToonMaterial = new THREE.MeshToonMaterial();
-        this.meshNormalMaterial = new THREE.MeshNormalMaterial();
-        this.meshBasicMaterial = new THREE.MeshBasicMaterial();
+        this.meshLambertMaterial = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide });
+        this.meshPhongMaterial = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
+        this.meshToonMaterial = new THREE.MeshToonMaterial({ side: THREE.DoubleSide });
+        this.meshNormalMaterial = new THREE.MeshNormalMaterial({ side: THREE.DoubleSide });
+        this.meshBasicMaterial = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide });
 
         document.addEventListener("changeToGouraudEvent", this.handleChangeToGouraud.bind(this));
         document.addEventListener("changeToPhongEvent", this.handleChangeToPhong.bind(this));
