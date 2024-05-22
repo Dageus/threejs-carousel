@@ -62,7 +62,7 @@ class MainScene {
     this.renderer.xr.enabled = true;
 
     this.renderer.setAnimationLoop(this.animate.bind(this));
-    this.renderer.xr.getSession().addEventListener('end', this.onSessionEnd.bind(this));
+    this.renderer.xr.addEventListener('sessionend', this.onSessionEnd.bind(this));
   }
 
   animate() {
@@ -79,6 +79,7 @@ class MainScene {
   }
 
   onSessionEnd() {
+    console.log("jufnso");
     this.camera.position.copy(this.originalCameraPosition);
     this.camera.rotation.copy(this.originalCameraRotation);
     this.camera.updateProjectionMatrix();
