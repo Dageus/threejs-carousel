@@ -80,6 +80,8 @@ class MainScene {
       this.sessionEnded = false;
       this.resize();
     }
+    let deltaTime = this.clock.getDelta();
+    carousel.update(deltaTime);
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -114,3 +116,4 @@ let carousel = new Carousel(materialManager);
 let mobius = new Mobius(materialManager)
 let lights = new Lights(mobius.pointLights, carousel.spotlights);
 let mainScene = new MainScene(carousel.carouselGroup, mobius.strip, lights.lightsGroup, materialManager);
+mainScene.animate();
