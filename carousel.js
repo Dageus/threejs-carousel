@@ -37,7 +37,7 @@ class Seats {
       }
       const seat = new THREE.Mesh(shape, material);
 
-      seat.position.set(x, y, z);
+      seat.position.set(x, y + 1, z);
       seat.rotation.y = angle;
       seat.castShadow = true;
       seat.receiveShadow = true;
@@ -46,7 +46,7 @@ class Seats {
       let spotlightObject = this.createSpotlight();
 
       spotlightObject.spotLight.position.set(x, height - 2.5, z);
-      spotlightObject.targetObject.position.set(x, height, z);
+      spotlightObject.targetObject.position.set(x, y, z);
       this.spotlights.push(spotlightObject.spotLight);
 
       this.seatGroup.add(seat, spotlightObject.spotLight, spotlightObject.targetObject);
@@ -54,7 +54,7 @@ class Seats {
   }
 
   createSpotlight() {
-    const spotLight = new THREE.SpotLight(new THREE.Color('white'), 150, 5);
+    const spotLight = new THREE.SpotLight(new THREE.Color('white'), 500, 6);
     const targetObject = new THREE.Object3D();
 
     spotLight.target = targetObject;
@@ -340,6 +340,7 @@ class Pillar {
       this.pillarTop = new THREE.Mesh(new THREE.CircleGeometry(5, 32), material);
       this.pillarTop.rotateOnAxis(new THREE.Vector3(-1, 0, 0), Math.PI / 2);
       this.pillarTop.position.y = 50;
+      materialManager.addObject(this.pillarTop);
 
       this.pillarTop.castShadow = true;
       this.pillarTop.receiveShadow = true;

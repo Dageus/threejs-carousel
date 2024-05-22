@@ -123,7 +123,7 @@ export class Lights {
     handleSpotlights(event) {
         if (event.detail.toggle) {
             this.spotlights.forEach(spotlight =>{
-                spotlight.intensity = 50;
+                spotlight.intensity = 500;
             });
             document.getElementById('spotlights').innerText = 'Spotlights: On';
         } else {
