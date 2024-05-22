@@ -21,19 +21,21 @@ class Seats {
       const material = materialManager.meshLambertMaterial.clone();
       material.color.set(Math.random() * 0xffffff);
 
-      if (i % 2 === 0) {
-        shape = new THREE.TorusKnotGeometry(2.7, 1);
+      let shape;
+
+      if (i % 5 === 0) {
+        shape = new THREE.IcosahedronGeometry(4, 0);
+      }
+      else if (i % 2 === 0) {
+        shape = new THREE.TorusKnotGeometry(2.5, 1);
       }
       else if (i % 3 === 0) {
-        shape = new THREE.TorusGeometry(2.7, 1);
-      }
-      else if (i % 5 === 0) {
-        shape = new THREE.IcosahedronGeometry(5, 0);
+        shape = new THREE.TorusGeometry(2.5, 1);
       }
       else {
-        shape = new THREE.DodecahedronGeometry(5, 0);
+        shape = new THREE.DodecahedronGeometry(4, 0);
       }
-      const seat = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.5, 5), material);
+      const seat = new THREE.Mesh(shape, material);
 
       seat.position.set(x, y, z);
       seat.rotation.y = angle;
