@@ -26,11 +26,11 @@ export default class Mobius {
       o.lookAt(0, 0, 0);
       this.strip.add(o);
       const mat = materialManager.meshLambertMaterial.clone();
-      mat.color.set(new THREE.Color(`hsl(${a * 360 / Math.PI},55%,55%)`));
+      mat.color.set(new THREE.Color(`hsl(${5},55%,55%)`));
       const mesh = new THREE.Mesh(box, mat);
       mesh.scale.set(0.03, 0.3, 0.001)
       mesh.castShadow = true;
-      mesh.receiveShadow  = true;
+      mesh.receiveShadow = true;
       mesh.rotation.x = a / 2;
       o.add(mesh)
       materialManager.addObject(mesh);
