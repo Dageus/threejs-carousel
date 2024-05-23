@@ -1,4 +1,7 @@
 import * as THREE from 'three';
+import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js';
+import { ParametricGeometries } from 'three/addons/geometries/ParametricGeometries.js';
+
 
 export default class Mobius {
   constructor(materialManager) {
