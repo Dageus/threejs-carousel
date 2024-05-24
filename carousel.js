@@ -1,9 +1,7 @@
 import * as THREE from "three";
 import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js';
-import { ParametricGeometries } from 'three/addons/geometries/ParametricGeometries.js';
 //'use strict';
 
-// TODO usar ParametricGeometry porque era demasiado tarde para eu entender como isto funciona
 class Seats {
   constructor(radius, height, materialManager) {
     this.seatGroup = new THREE.Group();
@@ -23,60 +21,23 @@ class Seats {
       material.color.set(Math.random() * 0xffffff);
 
       let shapes = [
-        new ParametricGeometry(
-          ParametricGeometries.klein,
-          25,
-          25
-        ),
-        new ParametricGeometry(
-          ParametricGeometries.cone,
-          25,
-          25
-        ),
-        new ParametricGeometry(
-          ParametricGeometries.mobius,
-          25,
-          25
-
-        ),
-        new ParametricGeometry(
-          ParametricGeometries.torus,
-          25,
-          25
-        ),
-        new ParametricGeometry(
-          ParametricGeometries.sphere,
-          25,
-          25
-
-        ),
-        new ParametricGeometry(
-          ParametricGeometries.tube,
-          25,
-          25
-
-        ),
-        new ParametricGeometry(
-          ParametricGeometries.tube,
-          25,
-          25
-
-        ),
-        new ParametricGeometry(
-          ParametricGeometries.tube,
-          25,
-          25
-
-        ),
+        this.createParametricGeometry(this.sphere, 20, 20),
+        this.createParametricGeometry(this.torus, 20, 20),
+        this.createParametricGeometry(this.halfMoons, 20, 20),
+        this.createParametricGeometry(this.klein, 20, 20),
+        this.createParametricGeometry(this.cone, 20, 20),
+        this.createParametricGeometry(this.butterfly, 40, 20),
+        this.createParametricGeometry(this.donut, 20, 20),
+        this.createParametricGeometry(this.twisted, 20, 20),
       ];
 
 
-      const seat = new THREE.Mesh(shapes[i % shapes.length], material);
+      const seat = new THREE.Mesh(shapes[i], material);
 
       seat.position.set(x, y + 1, z);
       seat.rotation.y = angle;
       seat.castShadow = true;
-      seat.receiveShadow = true;
+      // seat.receiveShadow = true;
 
       materialManager.addObject(seat);
       let spotlightObject = this.createSpotlight();
@@ -87,10 +48,138 @@ class Seats {
 
       this.seatGroup.add(seat, spotlightObject.spotLight, spotlightObject.targetObject);
     }
+
+  }
+
+  createParametricGeometry(func, uSeg, vSeg) {
+    const geometry = new THREE.BufferGeometry();
+    const vertices = [];
+    const indices = [];
+
+    for (let i = 0; i <= uSeg; i++) {
+      for (let j = 0; j <= vSeg; j++) {
+        const u = i / uSeg;
+        const v = j / vSeg;
+
+        const vertex = func(u, v);
+
+        vertices.push(vertex.x, vertex.y, vertex.z);
+
+        if (i < uSeg && j < vSeg) {
+          const u_ = i + 1;
+          const v_ = j + 1;
+          const a = i + j * (vSeg + 1);
+          const b = u_ + j * (vSeg + 1);
+          const c = i + v_ * (vSeg + 1);
+          const d = u_ + v_ * (vSeg + 1);
+
+          indices.push(a, b, d, b, c, d);
+        }
+      }
+
+    }
+
+    geometry.setIndex(indices);
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+
+    return geometry;
+  }
+
+  sphere = (u, v) => {
+    u *= Math.PI;
+    v *= 2 * Math.PI;
+
+    const x = 3 * Math.sin(u) * Math.cos(v);
+    const y = 3 * Math.sin(u) * Math.sin(v);
+    const z = 3 * Math.cos(u);
+
+    return new THREE.Vector3(x, y, z);
+  }
+
+  torus = (u, v) => {
+    u *= 2 * Math.PI;
+    v *= 2 * Math.PI;
+
+    const x = Math.cos(u) * (2.5 * Math.cos(v));
+    const y = 0.5 * Math.sin(v);
+    const z = (2.5 * Math.cos(u)) * Math.sin(v);
+
+    return new THREE.Vector3(x, y, z);
+  }
+
+  halfMoons = (u, v) => {
+    // create a half moon shape 
+    // u *= Math.PI; // Half the range for u (0 to π)
+    v *= 2 * Math.PI; // Full range for v (0 to 2π)
+
+    const radius = 3; // Radius of the torus
+    const tubeRadius = 1; // Radius of the tube (cross-section of the torus)
+
+    const x = (radius + tubeRadius * Math.cos(v)) * Math.cos(u);
+    const y = (radius + tubeRadius * Math.cos(v)) * Math.sin(u);
+    const z = tubeRadius * Math.sin(v);
+
+    return new THREE.Vector3(x, y, z)
+  }
+
+  klein = (u, v) => {
+    u *= Math.PI;
+    v *= 2 * Math.PI;
+
+    u = u * 2;
+    const x = (3 + Math.cos(v)) * Math.cos(u);
+    const y = (3 + Math.cos(v)) * Math.sin(u);
+    const z = Math.sin(v) * 1.5;
+
+    return new THREE.Vector3(x, y, z);
+  }
+
+  cone = (u, v) => {
+    u *= 2 * Math.PI;
+
+    const x = 4 * (1 - v) * Math.cos(u);
+    const y = -4 * (1 - v)
+    const z = 4 * (1 - v) * Math.sin(u);
+
+    return new THREE.Vector3(x, y, z);
+  }
+
+  butterfly = (u, v) => {
+    u *= 2 * Math.PI;
+    v *= 2 * Math.PI;
+
+    const x = Math.sin(u) * (Math.exp(Math.cos(v)) - 2 * Math.cos(4 * u) - Math.pow(Math.sin(v / 2), 5));
+    const y = Math.cos(u) * (Math.exp(Math.cos(v)) - 2 * Math.cos(4 * u) - Math.pow(Math.sin(v / 2), 5));
+    const z = Math.pow(Math.sin(u), 2) * Math.exp(Math.cos(v / 2));
+
+    return new THREE.Vector3(x, y, z);
+  }
+
+  donut = (u, v) => {
+    u *= 2 * Math.PI;
+    v *= 2 * Math.PI;
+
+    const x = Math.cos(u) * (3 + Math.cos(v));
+    const y = Math.sin(u) * (3 + Math.cos(v));
+    const z = Math.sin(v);
+
+    return new THREE.Vector3(x, y, z);
+  }
+
+  twisted = (u, v) => {
+    // create a cylinder thats twisted on the y axis
+    u *= 2 * Math.PI;
+    v *= 2 * Math.PI;
+
+    const x = 3 * Math.sin(u) * Math.sin(v);
+    const y = 3 * Math.cos(u) * Math.sin(v);
+    const z = 3 * Math.cos(v);
+
+    return new THREE.Vector3(x, y, z);
   }
 
   createSpotlight() {
-    const spotLight = new THREE.SpotLight(new THREE.Color('white'), 500, 6);
+    const spotLight = new THREE.SpotLight(new THREE.Color('white'), 10, 6);
     const targetObject = new THREE.Object3D();
 
     spotLight.target = targetObject;
