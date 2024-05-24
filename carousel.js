@@ -123,8 +123,8 @@ class InnerRing {
     materialManager.addObject(this.lowerRing);
 
     let path = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0, 20, 0), // Start point (bottom)
-      new THREE.Vector3(0, 30, 0)   // End point (top)
+      new THREE.Vector3(0, 20, 0), 
+      new THREE.Vector3(0, 30, 0)  
     ]);
 
     this.outerWall = new THREE.Mesh(new THREE.TubeGeometry(path, 20, 15, 32, false), material);
@@ -133,8 +133,8 @@ class InnerRing {
     materialManager.addObject(this.outerWall);
 
     path = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0, 20, 0), // Start point (bottom)
-      new THREE.Vector3(0, 30, 0)   // End point (top)
+      new THREE.Vector3(0, 20, 0), 
+      new THREE.Vector3(0, 30, 0)
     ]);
 
     this.innerWall = new THREE.Mesh(new THREE.TubeGeometry(path, 20, 5, 32, false), material);
@@ -206,8 +206,8 @@ class MiddleRing {
     materialManager.addObject(this.lowerRing);
 
     let path = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0, 10, 0), // Start point (bottom)
-      new THREE.Vector3(0, 20, 0)   // End point (top)
+      new THREE.Vector3(0, 10, 0),
+      new THREE.Vector3(0, 20, 0)
     ]);
 
     this.outerWall = new THREE.Mesh(new THREE.TubeGeometry(path, 20, 25, 32, false), material);
@@ -216,8 +216,8 @@ class MiddleRing {
     materialManager.addObject(this.outerWall);
 
     path = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0, 10, 0), // Start point (bottom)
-      new THREE.Vector3(0, 20, 0)   // End point (top)
+      new THREE.Vector3(0, 10, 0),
+      new THREE.Vector3(0, 20, 0)
     ]);
 
     this.innerWall = new THREE.Mesh(new THREE.TubeGeometry(path, 20, 15, 32, false), material);
