@@ -19,6 +19,7 @@ class Seats {
 
       const material = materialManager.meshLambertMaterial.clone();
       material.color.set(Math.random() * 0xffffff);
+      material.emi
 
       let shapes = [
         this.createParametricGeometry(this.sphere, 20, 20),
@@ -26,9 +27,9 @@ class Seats {
         this.createParametricGeometry(this.halfMoons, 20, 20),
         this.createParametricGeometry(this.klein, 20, 20),
         this.createParametricGeometry(this.cone, 20, 20),
-        this.createParametricGeometry(this.butterfly, 40, 20),
+        this.createParametricGeometry(this.butterfly, 20, 20),
         this.createParametricGeometry(this.donut, 20, 20),
-        this.createParametricGeometry(this.twisted, 20, 20),
+        this.createParametricGeometry(this.twisted, 20, 20)
       ];
 
 
@@ -42,7 +43,7 @@ class Seats {
       materialManager.addObject(seat);
       let spotlightObject = this.createSpotlight();
 
-      spotlightObject.spotLight.position.set(x, height - 2 + 2, z);
+      spotlightObject.spotLight.position.set(x, height, z);
       spotlightObject.targetObject.position.set(x, y + 2, z);
       this.spotlights.push(spotlightObject.spotLight);
 
@@ -55,16 +56,16 @@ class Seats {
     const geometry = new THREE.BufferGeometry();
     const vertices = [];
     const indices = [];
-
+    
     for (let i = 0; i <= uSeg; i++) {
       for (let j = 0; j <= vSeg; j++) {
         const u = i / uSeg;
         const v = j / vSeg;
-
+        
         const vertex = func(u, v);
-
+        
         vertices.push(vertex.x, vertex.y, vertex.z);
-
+        
         if (i < uSeg && j < vSeg) {
           const u_ = i + 1;
           const v_ = j + 1;
@@ -72,15 +73,16 @@ class Seats {
           const b = u_ + j * (vSeg + 1);
           const c = i + v_ * (vSeg + 1);
           const d = u_ + v_ * (vSeg + 1);
-
-          indices.push(a, b, d, b, c, d);
+          
+          indices.push(a, b, d, c, d, a);
         }
       }
 
     }
-
-    geometry.setIndex(indices);
+    
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    geometry.setIndex(indices);
+    geometry.computeVertexNormals(); // Compute t
 
     return geometry;
   }
@@ -179,7 +181,7 @@ class Seats {
   }
 
   createSpotlight() {
-    const spotLight = new THREE.SpotLight(new THREE.Color('white'), 10, 6);
+    const spotLight = new THREE.SpotLight(new THREE.Color('white'), 500, 6);
     const targetObject = new THREE.Object3D();
 
     spotLight.target = targetObject;

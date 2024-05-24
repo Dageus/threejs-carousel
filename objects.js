@@ -109,7 +109,7 @@ export class Lights {
     handlePointLights(event) {
         if (event.detail.toggle) {
             this.pointLights.forEach(pointLight => {
-                pointLight.intensity = 50;
+                pointLight.intensity = 25;
             })
             document.getElementById('pointLights').innerText = 'Point Lights: On';
         } else {
