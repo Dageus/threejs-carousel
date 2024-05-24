@@ -81,8 +81,8 @@ class Seats {
       materialManager.addObject(seat);
       let spotlightObject = this.createSpotlight();
 
-      spotlightObject.spotLight.position.set(x, height - 2.5, z);
-      spotlightObject.targetObject.position.set(x, y, z);
+      spotlightObject.spotLight.position.set(x, height - 2 + 2, z);
+      spotlightObject.targetObject.position.set(x, y + 2, z);
       this.spotlights.push(spotlightObject.spotLight);
 
       this.seatGroup.add(seat, spotlightObject.spotLight, spotlightObject.targetObject);
@@ -158,15 +158,15 @@ class InnerRing {
     this.innerRing.rotation.y += deltaTime * 0.33;
   }
 
-  moveVertically() {
+  moveVertically(deltaTime) {
     if (this.up) {
-      this.innerRing.position.y += 0.5;
+      this.innerRing.position.y += 10 * deltaTime;
       if (this.innerRing.position.y > 20) {
         this.up = false;
         this.innerRing.position.y = 20;
       }
     } else {
-      this.innerRing.position.y -= 0.5;
+      this.innerRing.position.y -= 10 * deltaTime;
       if (this.innerRing.position.y < -20) {
         this.up = true;
         this.innerRing.position.y = -20;
@@ -177,7 +177,7 @@ class InnerRing {
   update(deltaTime) {
     this.moveHorizontally(deltaTime);
     if (this.vertical) {
-      this.moveVertically();
+      this.moveVertically(deltaTime);
     }
   }
 
@@ -241,15 +241,15 @@ class MiddleRing {
     this.middleRing.rotation.y += deltaTime * -0.66;
   }
 
-  moveVertically() {
+  moveVertically(deltaTime) {
     if (this.up) {
-      this.middleRing.position.y += 1;
+      this.middleRing.position.y += 15 * deltaTime;
       if (this.middleRing.position.y > 30) {
         this.up = false;
         this.middleRing.position.y = 30;
       }
     } else {
-      this.middleRing.position.y -= 1;
+      this.middleRing.position.y -= 15 * deltaTime;
       if (this.middleRing.position.y < -10) {
         this.up = true;
         this.middleRing.position.y = -10;
@@ -260,7 +260,7 @@ class MiddleRing {
   update(deltaTime) {
     this.moveHorizontally(deltaTime);
     if (this.vertical) {
-      this.moveVertically();
+      this.moveVertically(deltaTime);
     }
   }
 
@@ -324,15 +324,15 @@ class OuterRing {
     this.outerRing.rotation.y += deltaTime * 1;
   }
 
-  moveVertically() {
+  moveVertically(deltaTime) {
     if (this.up) {
-      this.outerRing.position.y += 1.5;
+      this.outerRing.position.y += 20 * deltaTime;
       if (this.outerRing.position.y > 40) {
         this.up = false;
         this.outerRing.position.y = 40;
       }
     } else {
-      this.outerRing.position.y -= 1.5;
+      this.outerRing.position.y -= 20 * deltaTime;
       if (this.outerRing.position.y < 0) {
         this.up = true;
         this.outerRing.position.y = 0;
@@ -343,7 +343,7 @@ class OuterRing {
   update(deltaTime) {
     this.moveHorizontally(deltaTime);
     if (this.vertical) {
-      this.moveVertically();
+      this.moveVertically(deltaTime);
     }
   }
 
@@ -384,6 +384,15 @@ class Pillar {
 
     this.pillar.add(this.pillarSide, this.pillarBottom, this.pillarTop);
   }
+
+  moveHorizontally(deltaTime) {
+    this.pillar.rotation.y += deltaTime;
+  }
+
+  update(deltaTime) {
+    this.moveHorizontally(deltaTime);
+  }
+
 }
 
 
@@ -391,7 +400,7 @@ export default class Carousel {
   constructor(materialManager) {
     this.carouselGroup = new THREE.Group();
 
-    this.pillar = new Pillar(materialManager).pillar;
+    this.pillar = new Pillar(materialManager);
 
     this.outerRing = new OuterRing(materialManager);
     this.middleRing = new MiddleRing(materialManager);
@@ -400,13 +409,14 @@ export default class Carousel {
     this.spotlights = [];
     this.spotlights = [...this.outerRing.spotlights, ...this.middleRing.spotlights, ...this.innerRing.spotlights];
 
-    this.carouselGroup.add(this.pillar, this.outerRing.outerRing, this.middleRing.middleRing, this.innerRing.innerRing);
+    this.carouselGroup.add(this.pillar.pillar, this.outerRing.outerRing, this.middleRing.middleRing, this.innerRing.innerRing);
   }
 
   update(deltaTime) {
     this.innerRing.update(deltaTime);
     this.middleRing.update(deltaTime);
     this.outerRing.update(deltaTime);
+    this.pillar.update(deltaTime);
   }
 
 }

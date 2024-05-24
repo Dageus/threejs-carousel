@@ -35,7 +35,7 @@ class MainScene {
     floor.receiveShadow = true;
     materialManager.addObject(floor);
 
-    mobiusStrip.position.set(0, 55, 0);
+    mobiusStrip.position.set(0, 60, 0);
     mobiusStrip.rotateY(Math.PI / 2);
     this.scene.add(floor, lights, carousel, mobiusStrip);
 

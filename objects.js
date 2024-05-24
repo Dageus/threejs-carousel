@@ -73,18 +73,18 @@ export class Lights {
         this.directionalLight.shadow.mapSize.width = 1024;
         this.directionalLight.shadow.mapSize.height = 1024; 
         this.directionalLight.shadow.camera.near = 0.5;
-        this.directionalLight.shadow.camera.far = 500; 
-        this.directionalLight.shadow.camera.left = -50;
-        this.directionalLight.shadow.camera.right = 50;
-        this.directionalLight.shadow.camera.top = 50;
-        this.directionalLight.shadow.camera.bottom = -50;
+        this.directionalLight.shadow.camera.far = 700; 
+        this.directionalLight.shadow.camera.left = -100;
+        this.directionalLight.shadow.camera.right = 100;
+        this.directionalLight.shadow.camera.top = 100;
+        this.directionalLight.shadow.camera.bottom = -100;
 
         this.pointLights = pointLights;
         this.spotlights = spotlights;
 
         this.lightsGroup = new THREE.Group();
 
-        const ambientLight = new THREE.AmbientLight(new THREE.Color('orangered'), 0.1); 
+        const ambientLight = new THREE.AmbientLight(new THREE.Color('orangered'), 1); 
 
         this.lightsGroup.add(ambientLight, this.directionalLight);
 

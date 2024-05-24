@@ -1,47 +1,64 @@
 import * as THREE from 'three';
-import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js';
-import { ParametricGeometries } from 'three/addons/geometries/ParametricGeometries.js';
 
 
 export default class Mobius {
   constructor(materialManager) {
     this.pointLights = [];
-    const count = 256 * 2;
-    const radius = 17;
-    const box = new THREE.BoxGeometry(10, 10, 10);
+    const width = 2.5;
+    const segments = 256 * 2;
+    const radius = 20;
     this.strip = new THREE.Object3D();
 
-    for (let i = 0; i < count; i++) {
-      const a = Math.PI / count * 2 * i;
+    const vertices = [];
+    const indices = [];
+    const normals = [];
 
-      // Add ponctual light
-      if (i % (count / 8) === 0) {
-        let pointLight = this.createPonctualLight();
-        pointLight.position.set(Math.cos(a), Math.sin(a * 5) / 30, Math.sin(a));
-        pointLight.position.multiplyScalar(radius);
-        this.pointLights.push(pointLight);
-        this.strip.add(pointLight);
-      }
+    for (let i = 0; i <= segments; i++) {
+        for (let j = 0; j <= segments; j++) {
+            const u = i / segments * Math.PI * 2;
+            const v = j / segments * 2 - 1;
+            const phi = u / 2;
 
-      const o = new THREE.Object3D();
-      o.position.set(Math.cos(a), Math.sin(a * 5) / 30, Math.sin(a))
-      o.position.multiplyScalar(radius);
-      o.lookAt(0, 0, 0);
-      this.strip.add(o);
-      const mat = materialManager.meshLambertMaterial.clone();
-      mat.color.set(new THREE.Color(`hsl(${5},55%,55%)`));
-      const mesh = new THREE.Mesh(box, mat);
-      mesh.scale.set(0.03, 0.3, 0.001)
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-      mesh.rotation.x = a / 2;
-      o.add(mesh)
-      materialManager.addObject(mesh);
+            const x = radius * Math.cos(u) + width * v * Math.cos(phi) * Math.cos(u);
+            const y = radius * Math.sin(u) + width * v * Math.cos(phi) * Math.sin(u);
+            const z = width * v * Math.sin(phi);
+
+            vertices.push(x, y, z);
+            normals.push(x, y, z);
+            
+            if (i % (segments / 8) === 0 && j === segments / 2) {
+              let pointLight = this.createPonctualLight();
+              pointLight.position.set(x, y, z);
+              this.pointLights.push(pointLight);
+              this.strip.add(pointLight);
+            }
+            if (i < segments && j < segments) {
+                const a = i * (segments + 1) + j;
+                const b = a + segments + 1;
+                indices.push(a, b, a + 1);
+                indices.push(b, b + 1, a + 1);
+            }
+        }
     }
-  }
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+    geometry.setIndex(indices);
+
+    const material = materialManager.meshLambertMaterial.clone();
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.receiveShadow = true;
+    mesh.castShadow = true;
+    materialManager.addObject(mesh);
+
+    this.strip.add(mesh);
+    this.strip.rotateZ(Math.PI / 2);
+}
+
 
   createPonctualLight() {
-    const pointLight = new THREE.PointLight(new THREE.Color('white'), 50, 50);
+    const pointLight = new THREE.PointLight(new THREE.Color('white'), 25, 10);
     pointLight.castShadow = true;
     pointLight.shadow.mapSize.width = 1024;
     pointLight.shadow.mapSize.height = 1024;

@@ -25,6 +25,7 @@ export class InputManager {
     }
 
     handleKeyDown(event) {
+        console.log(event.code);
         switch (event.code) {
             case "Digit1":
                 this.dispatchMoveOuterRingEvent(true);
