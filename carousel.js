@@ -10,6 +10,28 @@ class Seats {
     const numSeats = 8;
     const angleIncrement = (2 * Math.PI) / numSeats;
 
+    let shapes = [
+      this.createParametricGeometry(this.sphere, 20, 20),
+      this.createParametricGeometry(this.torus, 20, 20),
+      this.createParametricGeometry(this.halfMoons, 20, 20),
+      this.createParametricGeometry(this.klein, 20, 20),
+      this.createParametricGeometry(this.cone, 20, 20),
+      this.createParametricGeometry(this.butterfly, 20, 20),
+      this.createParametricGeometry(this.donut, 20, 20),
+      this.createParametricGeometry(this.twisted, 20, 20)
+    ];
+
+    this.rotations = [
+      new THREE.Vector3(1, 0, 0),
+      new THREE.Vector3(0, 1, 0),
+      new THREE.Vector3(0, 0, 1),
+      new THREE.Vector3(-1, 0, 0),
+      new THREE.Vector3(0, -1, 0),
+      new THREE.Vector3(0, 0, -1),
+      new THREE.Vector3(1, 1, 0).normalize(),
+      new THREE.Vector3(0, 1, 1).normalize()
+    ];
+
     for (let i = 0; i < numSeats; i++) {
       const angle = i * angleIncrement;
 
@@ -20,17 +42,6 @@ class Seats {
       const material = materialManager.meshLambertMaterial.clone();
       material.color.set(Math.random() * 0xffffff);
       material.emi
-
-      let shapes = [
-        this.createParametricGeometry(this.sphere, 20, 20),
-        this.createParametricGeometry(this.torus, 20, 20),
-        this.createParametricGeometry(this.halfMoons, 20, 20),
-        this.createParametricGeometry(this.klein, 20, 20),
-        this.createParametricGeometry(this.cone, 20, 20),
-        this.createParametricGeometry(this.butterfly, 20, 20),
-        this.createParametricGeometry(this.donut, 20, 20),
-        this.createParametricGeometry(this.twisted, 20, 20)
-      ];
 
 
       const seat = new THREE.Mesh(shapes[i], material);
@@ -188,6 +199,20 @@ class Seats {
 
     return { spotLight, targetObject };
   }
+
+  applyRotations(deltaTime) {
+    let j = 0;
+    for (let i = 0; i < this.seatGroup.children.length; i++) {
+      if (this.seatGroup.children[i].type === "Mesh") {
+        this.seatGroup.children[i].rotateOnAxis(this.rotations[j], (Math.PI / 2) * deltaTime);
+        j++;
+      }
+    }
+  }
+
+  update(deltaTime) {
+    this.applyRotations(deltaTime);
+  }
 }
 
 
@@ -266,6 +291,7 @@ class InnerRing {
   }
 
   update(deltaTime) {
+    this.seats.update(deltaTime);
     this.moveHorizontally(deltaTime);
     if (this.vertical) {
       this.moveVertically(deltaTime);
@@ -349,6 +375,7 @@ class MiddleRing {
   }
 
   update(deltaTime) {
+    this.seats.update(deltaTime);
     this.moveHorizontally(deltaTime);
     if (this.vertical) {
       this.moveVertically(deltaTime);
@@ -432,6 +459,7 @@ class OuterRing {
   }
 
   update(deltaTime) {
+    this.seats.update(deltaTime);
     this.moveHorizontally(deltaTime);
     if (this.vertical) {
       this.moveVertically(deltaTime);
